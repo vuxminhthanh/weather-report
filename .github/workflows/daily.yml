@@ -1,0 +1,35 @@
+name: Daily Weather Report
+
+on:
+  schedule:
+    - cron: '00 00 * * *' # 00:00 UTC = 07:00 sáng VN
+  workflow_dispatch: # Cho phép bấm nút chạy thủ công
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Quyền tối thiểu để commit file json
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: pip install requests
+
+      - name: Run Script
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python weather_report.py
+
+      - name: Commit History Data
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update weather history"
+          file_pattern: weather_history.json

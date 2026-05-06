@@ -2,7 +2,7 @@ name: Daily Weather Report
 
 on:
   schedule:
-    - cron: '00 00 * * *' # 00:00 UTC = 07:00 sáng VN
+    - cron: '45 22 * * *' # 00:00 UTC = 07:00 sáng VN
   workflow_dispatch: # Cho phép bấm nút chạy thủ công
 
 jobs:
